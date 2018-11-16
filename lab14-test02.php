@@ -8,8 +8,6 @@ require_once 'lab14-test02-helpers.inc.php';
 // now retrieve galleries 
  
 // now retrieve  paintings ... either all or a subset based on querystring
- 
-
 
 ?>
 <!DOCTYPE html>
@@ -33,7 +31,14 @@ require_once 'lab14-test02-helpers.inc.php';
             <label>Museum</label>
             <select class="ui fluid dropdown" name="museum">
                 <option value='0'>Select Museum</option>  
-                <?php  
+                <?php 
+                    $pdo = setConnectionInfo(DBCONNSTRING, DBUSER, DBPASS);
+                    $sql = getGallerySQL();
+                    $gallery = $pdo->query($sql);
+                    foreach($gallery as $g){
+                    echo "<option value='".$g["GalleryID"]."'>".$g['GalleryName']."</option>";
+                   }
+                   $pdo = null;
                    // output all the retrieved galleries (hint: set value attribute of <option> to the GalleryID field)
                 ?>
             </select>
@@ -50,24 +55,7 @@ require_once 'lab14-test02-helpers.inc.php';
         <h1 class="ui header">Paintings</h1>
         <ul class="ui divided items" id="paintingsList">
             
-          
-
-          <li class="item">
-            <a class="ui small image" href="single-painting.php?id=id here"><img src="images/art/works/square-medium/001150.jpg"></a>
-            <div class="content">
-              <a class="header" href="single-painting.php?id=id here">title here</a>
-              <div class="meta"><span class="cinema">Artist name here</span></div>        
-              <div class="description">
-                <p>Excerpt here</p>
-              </div>
-              <div class="meta">     
-                  <strong>MSRP here</strong>        
-              </div>        
-            </div>      
-          </li>
-            
-
-
+          <?php outputPaintings(); ?>
 
         </ul>        
     </section>  

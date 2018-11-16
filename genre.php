@@ -4,7 +4,12 @@ require_once('config.inc.php');
 require_once('lab14-db-functions.inc.php'); 
 require_once('lab14-ex11-helpers.inc.php'); 
 
+if (isset($_GET["id"]))
+ $id = $_GET["id"];
+else
+ $id = 78; // set a default id if its missing
 
+$genre = getSingleGenre($id); 
 
 ?>
 <!DOCTYPE html>
@@ -18,19 +23,21 @@ require_once('lab14-ex11-helpers.inc.php');
 <body>
 <main class="ui container">
     <div class="ui secondary segment">
-         <h1> </h1>
+         <h1><?php echo $genre['GenreName']; ?></h1>
     </div>    
     <div class="ui segment">
         <div class="ui grid">
            <div class="three wide column">
-                <img src="images/art/genres/square-medium/ .jpg" >
+                <img src="images/art/genres/square-medium/<?php echo
+$genre['GenreId']; ?>.jpg" >
            </div>
            <div class="thirteen wide column">
-                <p> </p>
+                <p><?php echo $genre['Description']; ?> </p>
                 <p>
-                <a class="ui labeled icon primary button" href=" ">
+                <a class="ui labeled icon primary button" href="<?php echo $genre['Link']; ?>">
                   <i class="external icon"></i>
                   Read more on Wikipedia about 
+                  <?php echo $genre['GenreName']; ?>
                 </a>
                 </p>
            </div> 

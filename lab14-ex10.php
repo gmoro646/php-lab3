@@ -33,14 +33,17 @@ function outputPaintings() {
          $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
          $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
          
-         $sql = 'select * from Paintings where ArtistId=';
-
-         while ($row = ->fetch()) {
-            outputSinglePainting($row);         
-         }
-         $pdo = null;
+         $sql = 'select * from Paintings where ArtistId=:id';
+          $id = $_GET['id'];
+          $statement = $pdo->prepare($sql);
+          $statement->bindValue(':id', $id);
+          $statement->execute();
+          while ($row = $statement->fetch()) {
+          outputSinglePainting($row);
+          }
+          $pdo = null;
+          }
       }
-   }
    catch (PDOException $e) {
       die( $e->getMessage() );
    }

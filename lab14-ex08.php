@@ -52,19 +52,28 @@ catch (PDOException $e) {
    
       <?php
          // only display painting cards if one has been selected
-  
+          if ($_SERVER["REQUEST_METHOD"] == "GET") {
+          if (isset($_GET['gallery']) && $_GET['gallery'] > 0) {
+          $sql = 'select * from Paintings where GalleryId=' .
+          $_GET['gallery'];
+          $result = $pdo->query($sql);
+          while ($row = $result->fetch()) { 
          ?>
               <div class="card">
                   <div class="image">
-                     <img src="images/art/works/square-medium/.jpg" 
-                        title="" alt="">
+                     <img src="images/art/works/square-medium/<?php
+echo $row['ImageFileName']; ?>.jpg" 
+                        title="<?php echo $row['Title']; ?>" alt="<?php echo $row['Title']; ?>">
                   </div> 
-                  <div class="extra">
+                  <div class="extra"><?php echo $row['Title'];
+                  ?>
                       
                   </div>
                </div> <!-- end class=card-->
          <?php          
- 
+          } // end while
+ } // end if (isset
+ } // end if ($_SERVER 
          ?>   
       </div> <!-- end class=four cards-->
    </div>  <!-- end class=segment-->

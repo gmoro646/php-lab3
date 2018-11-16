@@ -5,7 +5,13 @@
 */
 function getSingleGenre($id) {
     try {
-
+         $connection=setConnectionInfo(DBCONNSTRING,DBUSER,DBPASS);
+         $sql = 'select GenreId, GenreName, Description, Link from
+         Genres where GenreId=?';
+         $statement = runQuery($connection, $sql, array($id));
+         $row = $statement->fetch(PDO::FETCH_ASSOC);
+         $connection = null;
+         return $row; 
     }
     catch (PDOException $e) {
        die( $e->getMessage() );
@@ -17,8 +23,13 @@ function getSingleGenre($id) {
 */
 function getAllGenres() {
    try {
-
-   }
+     $connection = setConnectionInfo(DBCONNSTRING,DBUSER,DBPASS);
+     $sql = 'select GenreId, GenreName, Description from Genres
+     Order By EraID';
+    
+     $result = runQuery($connection, $sql, null);
+     return $result; 
+       }
    catch (PDOException $e) {
       die( $e->getMessage() );
    }    
@@ -29,7 +40,10 @@ function getAllGenres() {
  Displays a list of genres
 */
 function outputGenres() {
- 
+     $genres = getAllGenres();
+     foreach ($genres as $g) {
+     outputSingleGenre($g);
+ } 
 }
 
 
@@ -37,16 +51,19 @@ function outputGenres() {
  Displays a single genre
 */
 function outputSingleGenre($genre) {
-   echo '<div class="ui fluid card">';
-      echo '<div class="ui fluid image">';
- 
-      echo '</div>';
-      echo '<div class="extra">';
-         echo '<h4>';
- 
-         echo '</h4>';
-      echo '</div>';
-   echo '</div>';
+ echo '<div class="ui fluid card">';
+ echo '<div class="ui fluid image">';
+ $img = '<img src="images/art/genres/square-medium/' .
+ $genre['GenreId'] .'.jpg">';
+ echo constructGenreLink($genre['GenreId'], $img);
+ echo '</div>';
+ echo '<div class="extra">';
+ echo '<h4>';
+ echo constructGenreLink($genre['GenreId'],
+ $genre['GenreName']);
+ echo '</h4>';
+ echo '</div>';
+ echo '</div>';
 }
 
 /* 
